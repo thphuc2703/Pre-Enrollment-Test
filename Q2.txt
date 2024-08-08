@@ -1,0 +1,32 @@
+1. Lưu trữ địa chỉ trong bảng khách hàng (Embedded Address)
+- Cấu trúc
+Trong bảng KhachHang, có các cột để lưu trữ địa chỉ như DiaChi, ThanhPho, QuocGia, v.v.
+- Ưu điểm:
+Đơn giản: Dễ dàng thiết kế và triển khai, chỉ cần một bảng duy nhất để lưu trữ tất cả thông tin khách hàng và địa chỉ.
+Truy vấn nhanh: Khi cần lấy thông tin khách hàng cùng với địa chỉ, không cần thực hiện join bảng, giúp truy vấn nhanh hơn.
+- Nhược điểm:
+Khó quản lý thay đổi: Nếu địa chỉ của khách hàng thay đổi, việc cập nhật có thể dẫn đến mất dữ liệu lịch sử hoặc cần phải ghi đè lên dữ liệu cũ.
+Không lưu trữ lịch sử địa chỉ: Nếu cần lưu trữ lịch sử các địa chỉ trước đây của khách hàng, cách này không phù hợp.
+
+2. Lưu trữ địa chỉ trong bảng riêng (Separate Address Table)
+- Cấu trúc
+Tạo một bảng KhachHang và một bảng DiaChi.
+Bảng DiaChi chứa các cột như DiaChi, ThanhPho, QuocGia, và có một khóa ngoại KhachHangID liên kết với bảng KhachHang.
+- Ưu điểm:
+Quản lý dễ dàng hơn: Dễ dàng thêm hoặc thay đổi địa chỉ của khách hàng mà không làm mất dữ liệu lịch sử.
+Lưu trữ lịch sử: Có thể lưu trữ nhiều địa chỉ cho một khách hàng và quản lý lịch sử thay đổi địa chỉ.
+Mở rộng: Dễ dàng mở rộng và thêm các thuộc tính khác liên quan đến địa chỉ mà không ảnh hưởng đến bảng khách hàng.
+- Nhược điểm:
+Phức tạp hơn: Cần nhiều bảng hơn, phức tạp hóa thiết kế cơ sở dữ liệu và truy vấn có thể chậm hơn do cần join giữa các bảng.
+Tăng kích thước dữ liệu: Lưu trữ nhiều bản ghi địa chỉ có thể làm tăng kích thước cơ sở dữ liệu.
+
+3. Lưu trữ địa chỉ hiện tại và lịch sử địa chỉ trong cùng một bảng (Current and Historical Addresses in One Table)
+- Cấu trúc
+Tạo một bảng DiaChi với các cột KhachHangID, DiaChi, ThanhPho, QuocGia, NgayBatDau, NgayKetThuc.
+Bảng này lưu trữ tất cả địa chỉ của khách hàng cùng với ngày bắt đầu và ngày kết thúc hiệu lực của địa chỉ đó.
+- Ưu điểm:
+Lưu trữ lịch sử chi tiết: Dễ dàng theo dõi và truy vấn lịch sử địa chỉ của khách hàng.
+Truy vấn địa chỉ hiện tại: Có thể dễ dàng truy vấn địa chỉ hiện tại bằng cách tìm kiếm địa chỉ với NgayKetThuc là NULL hoặc ngày kết thúc hiệu lực.
+- Nhược điểm:
+Phức tạp trong xử lý dữ liệu: Cần phải xử lý thêm logic khi cập nhật hoặc truy vấn địa chỉ hiện tại.
+Tăng dung lượng: Tương tự tùy chọn 2, lưu trữ lịch sử sẽ làm tăng dung lượng cơ sở dữ liệu.
